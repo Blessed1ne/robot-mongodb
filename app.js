@@ -2,12 +2,31 @@ const express = require("express")
 const MongoClient = require("mongodb")
 const app = express()
 const mustache = require("mustache-express")
+const bodyParser = require("body-parser")
 const path = ("path")
+const users = ("./models/Robot")
+const session = require("express-session")
+const newRobot = require("./models/Robot")
+const mongoose = require("mongoose")
+mongoose.Promise = require("bluebird")
 const MONGO_URL = "mongodb://127.0.0.1:27017/robots"
 
 app.engine('mustache', mustache())
 app.set('view engine', 'mustache')
 app.use( express.static('public'))
+
+var sess = {
+  secret: 'secretpassword',
+  cookie: {},
+  saveUninitialized: true,
+  resave: true
+}
+
+app.use(session(sess))
+app.use(bodyParser.urlencoded({
+  extended: false
+}))
+
 
 
 ///// code from teacher for import data to mongo /////
@@ -52,8 +71,54 @@ app.get("/users/:id", function(req, res) {
   })
 })
 
+app.get("/register", function(req, res){
+  res.render("register")
+})
+
+app.post("/newRobot", function (req, res){
+  const username = req.body.username
+  const passowrd = req.body.artist
+  const name = req.body.name
+  const skills = req.body.skills
+  const university = req.body.university
+  const email = req.body.email
+  const job = req.body.job
+  const company = req.body.company
+  const phonenumber = req.body.phonenumber
+  const user = new User()
+  users.username = username
+  users.passowrd = passowrd
+  users.name = name
+  users.skills = skills
+  users.university = university
+  users.email = email
+  users.job = job
+  users.company = company
+  users.phonenumber = phonenumber
+  console.log(users);
+  user
+    .save()
+    .then(function(users) {
+      res.redirect("/")
+    })
+    .catch(function(error) {
+      console.log("error", error)
+      res.render("new", {
+        album: album,
+        errors: error.errors
+      })
+    })
+})
+
+
+
+app.get("/edit", function(req, res){
+  res.render("edit")
+})
+
+
 
 
 app.listen(3000, function(){
-console.log("Express started on port 3000")
+console.log("Robots are listening on port 3000")
 })
