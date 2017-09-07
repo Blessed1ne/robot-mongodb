@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
+    "start": "nodemon app.js -e js, mustache",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "express": "^4.15.4",
